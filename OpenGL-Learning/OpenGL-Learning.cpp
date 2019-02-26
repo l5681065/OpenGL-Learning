@@ -2,21 +2,45 @@
 //
 
 #include "pch.h"
-#include "../CommonLib/common.h"
+
 #include <stdio.h>
 #include <glew.h>
 #include <freeglut.h>
 #include <iostream>
+using namespace std;
+#include "common.h"
+#include "Utils.h"
 
+
+const char * pVS = "shader.vert";
+const char * pFS = "shader.frag";
 
 static void RenderSceneCB();
 
 void RenderSceneCB()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
-
 	glutSwapBuffers();
+	
 }
+
+
+void CompileShader()
+{
+	string vs, fs;
+	if (!ReadFile(pVS, vs))
+	{
+		exit(1);
+	}
+	if (!ReadFile(pFS, fs))
+	{
+		exit(1);
+	}
+	cout << vs << endl;
+	cout << fs << endl;
+
+
+} 
 
 int main(int argc,char**  agrv)
 {
@@ -26,16 +50,17 @@ int main(int argc,char**  agrv)
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow("OpenGL-01");
 	
-	
+	glutDisplayFunc(RenderSceneCB);
+	glutIdleFunc(RenderSceneCB);
 	GLenum res = glewInit();
 	if (GLEW_OK!=res)
 	{
 		fprintf(stderr, "Error:%s", glewGetErrorString(res));
 		return 1;
 	}
-	glutDisplayFunc(RenderSceneCB);
-	glutIdleFunc(RenderSceneCB);
+	
 	glClearColor(0.0f,1.0f,0.0f,0.0f);
+	CompileShader();
 	glutMainLoop();
     std::cout << "Hello World!\n"; 
 }
