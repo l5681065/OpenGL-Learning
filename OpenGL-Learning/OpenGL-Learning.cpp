@@ -24,6 +24,35 @@ void RenderSceneCB()
 	
 }
 
+static void AddShader(GLuint ShaderProgram,const char * shaderText,GLenum shaderType)
+{
+	GLuint shaderObj= glCreateShader(shaderType);
+	if (shaderObj==0)
+	{
+		ErrorOut();
+		exit(1);
+	}
+	const GLchar* p[1];
+	p[0] = shaderText;
+	GLint L[1];
+	L[0] = strlen(shaderText);
+
+	glShaderSource(shaderObj,1,p,L);
+	glCompileShader(shaderObj);
+	 
+	GLint Success;
+	glGetShaderiv(shaderObj,GL_COMPILE_STATUS,&Success);
+	if (!Success)
+	{
+		GLchar InfoLog[1024];
+		glGetShaderInfoLog(shaderObj,1024,NULL,InfoLog);
+		fprintf(stderr, "Error compiling shader type %d: '%s'\n ", shaderType, InfoLog); 
+		exit(1);
+	}
+	glAttachShader(ShaderProgram,shaderObj);
+
+	   
+}
 
 void CompileShader()
 {
@@ -36,10 +65,52 @@ void CompileShader()
 	{
 		exit(1);
 	}
-	cout << vs << endl;
-	cout << fs << endl;
+	//cout << vs << endl;
+	//cout << fs << endl;
+	GLuint ShaderProgram = glCreateProgram();
+	if (ShaderProgram==0)
+	{
+		ErrorOut();
+		exit(1);
+	}
+	//绑定program
+	AddShader(ShaderProgram,vs.c_str(),GL_VERTEX_SHADER);
+	AddShader(ShaderProgram, fs.c_str(), GL_FRAGMENT_SHADER);
 
+	//链接
+	glLinkProgram(ShaderProgram);
+	GLint Success;
+	glGetShaderiv(ShaderProgram, GL_LINK_STATUS, &Success);
+	if (!Success)
+	{
+		GLchar InfoLog[1024];
+		glGetProgramInfoLog(ShaderProgram, 1024, NULL, InfoLog);
+		fprintf(stderr, "Error linking shader program '%s' \n", InfoLog);
+		exit(1);
+	}
 
+	// 链接
+	glGetShaderiv(ShaderProgram, GL_LINK_STATUS, &Success);
+	if (!Success)
+	{
+		GLchar InfoLog[1024];
+		glGetProgramInfoLog(ShaderProgram, 1024, NULL, InfoLog);
+		fprintf(stderr, "Error linking shader program '%s' \n", InfoLog);
+		exit(1);
+	}
+
+	//生效
+	glValidateProgram(ShaderProgram);
+	glGetShaderiv(ShaderProgram, GL_VALIDATE_STATUS, &Success);
+	if (!Success)
+	{
+		GLchar InfoLog[1024];
+		glGetProgramInfoLog(ShaderProgram, 1024, NULL, InfoLog);
+		fprintf(stderr, "Error validate shader program '%s' \n", InfoLog);
+		exit(1);
+	}
+	glUseProgram(ShaderProgram);
+ 
 } 
 
 int main(int argc,char**  agrv)
