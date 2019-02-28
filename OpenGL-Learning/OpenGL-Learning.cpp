@@ -10,7 +10,9 @@
 using namespace std;
 #include "common.h"
 #include "Utils.h"
+#include "math3d.h"
 
+GLuint VBO;
 
 const char * pVS = "shader.vert";
 const char * pFS = "shader.frag";
@@ -20,10 +22,25 @@ static void RenderSceneCB();
 void RenderSceneCB()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
+	glEnableVertexAttribArray(0);
+
+	glDisableVertexAttribArray(0);
 	glutSwapBuffers();
 	
 }
 
+static void CreateVertexBuffer()
+{
+	Vector3f Vertices[3];
+	Vertices[0] = Vector3f(-1.0f,-1.0f,0.0f);
+	Vertices[1] = Vector3f(1.0f, -1.0f, 0.0f);
+	Vertices[2] = Vector3f(0.0f, 1.0f, 0.0f);
+
+	glGenBuffers(1,&VBO);
+	glBindBuffer(GL_ARRAY_BUFFER,VBO);
+	glBufferData (GL_ARRAY_BUFFER,sizeof(Vertices),Vertices,GL_STATIC_DRAW);
+
+}
 static void AddShader(GLuint ShaderProgram,const char * shaderText,GLenum shaderType)
 {
 	GLuint shaderObj= glCreateShader(shaderType);
@@ -38,6 +55,7 @@ static void AddShader(GLuint ShaderProgram,const char * shaderText,GLenum shader
 	L[0] = strlen(shaderText);
 
 	glShaderSource(shaderObj,1,p,L);
+
 	glCompileShader(shaderObj);
 	 
 	GLint Success;

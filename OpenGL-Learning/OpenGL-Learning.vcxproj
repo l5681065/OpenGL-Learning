@@ -74,6 +74,7 @@
     <LinkIncremental>true</LinkIncremental>
     <ExecutablePath>$(VC_ExecutablePath_x86);$(WindowsSDK_ExecutablePath);$(VS_ExecutablePath);$(MSBuild_ExecutablePath);$(SystemRoot)\SysWow64;$(FxCopDir);$(PATH);C:\Lib\FreeGLUT\MSVC-3.0.0-2.mp\freeglut\include\GL</ExecutablePath>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\Lib\FreeGLUT\MSVC-3.0.0-2.mp\freeglut\include\GL;C:\Lib\GLEW\glew-2.1.0-win32\glew-2.1.0\include\GL</IncludePath>
+    <LibraryPath>C:\Lib\FreeGLUT\MSVC-3.0.0-2.mp\freeglut\lib;C:\Lib\GLEW\glew-2.1.0-win32\glew-2.1.0\lib\Release\Win32;C:\Lib\FreeGLUT\MSVC-3.0.0-2.mp\freeglut\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -110,7 +111,8 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>D:\VSProject\OpenGL-Learning\CommonLib;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -157,6 +159,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="common.h" />
+    <ClInclude Include="math3d.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
